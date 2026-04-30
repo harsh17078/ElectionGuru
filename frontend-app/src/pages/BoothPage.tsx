@@ -64,29 +64,55 @@ export default function BoothPage() {
         const center = { lat: loc.lat(), lng: loc.lng() };
         setMapCenter(center);
         mapRef.current?.panTo(center);
-        mapRef.current?.setZoom(14);
+        mapRef.current?.setZoom(13);
 
-        // Search for polling booths / government buildings nearby
+        // Search with multiple queries for better coverage
         const service = new google.maps.places.PlacesService(mapRef.current!);
-        const request: google.maps.places.TextSearchRequest = {
-          query: "polling booth OR government school OR community hall OR panchayat office",
-          location: loc,
-          radius: 5000,
-        };
+        const searchQueries = [
+          `polling booth near ${location}`,
+          `government school near ${location}`,
+          `community hall near ${location}`,
+          `collectorate OR tehsil office near ${location}`,
+        ];
 
-        service.textSearch(request, (places, placesStatus) => {
-          setSearching(false);
-          if (placesStatus === google.maps.places.PlacesServiceStatus.OK && places) {
-            const results: BoothResult[] = places.slice(0, 8).map((p) => ({
-              name: p.name || "Polling Station",
-              address: p.formatted_address || "",
-              lat: p.geometry?.location?.lat() || 0,
-              lng: p.geometry?.location?.lng() || 0,
-            }));
-            setBooths(results);
-          } else {
-            setBooths([]);
-          }
+        const allResults: BoothResult[] = [];
+        let completedSearches = 0;
+
+        searchQueries.forEach((query) => {
+          const request: google.maps.places.TextSearchRequest = {
+            query,
+            location: loc,
+            radius: 10000,
+          };
+
+          service.textSearch(request, (places, placesStatus) => {
+            completedSearches++;
+
+            if (placesStatus === google.maps.places.PlacesServiceStatus.OK && places) {
+              places.slice(0, 5).forEach((p) => {
+                const lat = p.geometry?.location?.lat() || 0;
+                const lng = p.geometry?.location?.lng() || 0;
+                // Avoid duplicates by checking coordinates
+                const isDuplicate = allResults.some(
+                  (r) => Math.abs(r.lat - lat) < 0.0001 && Math.abs(r.lng - lng) < 0.0001
+                );
+                if (!isDuplicate) {
+                  allResults.push({
+                    name: p.name || "Polling Station",
+                    address: p.formatted_address || "",
+                    lat,
+                    lng,
+                  });
+                }
+              });
+            }
+
+            // When all searches complete, update state
+            if (completedSearches === searchQueries.length) {
+              setSearching(false);
+              setBooths(allResults.slice(0, 12));
+            }
+          });
         });
       } else {
         setSearching(false);
