@@ -144,23 +144,24 @@ export default function BoothPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         onSubmit={handleSearch}
-        className="flex items-center gap-3 p-2 rounded-2xl bg-card border border-border/60 shadow-lg max-w-xl mx-auto mb-10"
+        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3 sm:p-2 rounded-2xl bg-card border border-border/60 shadow-lg max-w-xl w-full mx-auto mb-10"
       >
-        <div className="pl-3">
-          <Search className="w-5 h-5 text-muted-foreground" />
+        <div className="flex items-center flex-1 bg-background/50 sm:bg-transparent rounded-xl sm:rounded-none px-3 py-2 sm:p-0 border sm:border-none border-border/40">
+          <Search className="w-5 h-5 text-muted-foreground mr-2 flex-shrink-0" />
+          <input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder={t("booth_page.search")}
+            className="flex-1 bg-transparent outline-none text-sm py-1 min-w-0"
+          />
         </div>
-        <input
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder={t("booth_page.search")}
-          className="flex-1 bg-transparent outline-none text-sm py-2"
-        />
         <button
           type="submit"
           disabled={!isLoaded || searching}
-          className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
+          className="px-5 py-3 sm:py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 whitespace-nowrap flex-shrink-0 flex items-center justify-center shadow-sm sm:shadow-none"
         >
-          {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : t("booth_page.find")}
+          {searching ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+          {t("booth_page.find")}
         </button>
       </motion.form>
 
