@@ -50,8 +50,8 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-3 sm:px-6 py-6 sm:py-12 flex flex-col" style={{ minHeight: "calc(100vh - 10rem)" }}>
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6 sm:mb-8">
+    <div className="flex-1 w-full max-w-3xl mx-auto px-3 sm:px-6 py-4 sm:py-6 flex flex-col">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-4 sm:mb-6 flex-shrink-0">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 sm:mb-3">
           <span className="gradient-text">{t("chat_page.title")}</span>
         </h1>
@@ -64,7 +64,7 @@ export default function ChatPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-8 px-1"
+          className="flex flex-wrap justify-center gap-2 mb-4 sm:mb-6 px-1 flex-shrink-0"
         >
           {suggestions.map((s, i) => (
             <button
@@ -79,7 +79,7 @@ export default function ChatPage() {
       )}
 
       {/* Messages */}
-      <div className="flex-1 space-y-4 mb-6 overflow-y-auto">
+      <div className="flex-1 space-y-4 mb-4 overflow-y-auto pr-1 custom-scrollbar">
         {messages.map((msg, i) => (
           <motion.div
             key={i}
@@ -126,7 +126,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="sticky bottom-4">
+      <div className="flex-shrink-0 pb-2 pt-2">
         <form
           onSubmit={(e) => {
             e.preventDefault();

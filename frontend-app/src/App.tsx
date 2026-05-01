@@ -25,7 +25,7 @@ function App() {
     <Router>
       <div className="flex flex-col min-h-screen">
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-        <main className="flex-1">
+        <main className="flex-1 flex flex-col">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/timeline" element={<TimelinePage />} />
