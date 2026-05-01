@@ -1,11 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 from google import genai
 from typing import Optional
 import os
 import re
+from pathlib import Path
 
 load_dotenv()
 
@@ -84,7 +87,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
 
-@app.get("/")
+@app.get("/api/health")
 def read_root():
     return {"message": "Election Assistant Backend is Running"}
 
@@ -264,3 +267,19 @@ async def verify_voter(request: VerifyVoterRequest):
             validation_errors=["search_type must be 'epic' or 'details'."],
         )
 
+
+# --- Production: Serve built frontend ---
+STATIC_DIR = Path(__file__).parent / "static"
+if STATIC_DIR.exists():
+    # Serve static assets (JS, CSS, images)
+    app.mount("/assets", StaticFiles(directory=str(STATIC_DIR / "assets")), name="assets")
+
+    # SPA fallback: serve index.html for all non-API routes
+    @app.get("/{full_path:path}")
+    async def serve_spa(request: Request, full_path: str):
+        # If a static file exists, serve it
+        file_path = STATIC_DIR / full_path
+        if file_path.is_file():
+            return FileResponse(str(file_path))
+        # Otherwise serve index.html for client-side routing
+        return FileResponse(str(STATIC_DIR / "index.html"))
