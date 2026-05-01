@@ -118,7 +118,10 @@ async def chat(request: ChatRequest):
         
         return ChatResponse(response=response.text)
     except Exception as e:
-        return ChatResponse(response=f"Sorry, I encountered an error: {str(e)}")
+        error_msg = str(e)
+        if "Quota" in error_msg or "429" in error_msg or "EXHAUSTED" in error_msg:
+            return ChatResponse(response="⚠️ **API Quota Exhausted:** Your Gemini API key has run out of its free quota limit for today. Please generate a new API key from Google AI Studio and update it in your environment variables to continue using the Election AI Assistant.")
+        return ChatResponse(response=f"Sorry, I encountered an error: {error_msg}")
 
 @app.get("/api/timeline")
 def get_timeline():

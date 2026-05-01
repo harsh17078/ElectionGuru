@@ -73,7 +73,7 @@
 
 /* Glassmorphism utility */
 .glass {
-  background: hsl(var(--card) / 0.95);
+  background: hsl(var(--card) / 1);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid hsl(var(--border) / 0.4);
