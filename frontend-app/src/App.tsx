@@ -8,6 +8,7 @@ import GuidePage from "@/pages/GuidePage";
 import MythsPage from "@/pages/MythsPage";
 import ChatPage from "@/pages/ChatPage";
 import BoothPage from "@/pages/BoothPage";
+import VerifyPage from "@/pages/VerifyPage";
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/myths" element={<MythsPage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/booth" element={<BoothPage />} />
+            <Route path="/verify" element={<VerifyPage />} />
           </Routes>
         </main>
         <Footer />

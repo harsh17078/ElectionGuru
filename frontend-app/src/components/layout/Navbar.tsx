@@ -9,6 +9,7 @@ import {
   Shield,
   MessageCircle,
   MapPin,
+  ShieldCheck,
   Menu,
   X,
   Globe,
@@ -33,6 +34,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
     { to: "/myths", label: t("nav.myths"), icon: Shield },
     { to: "/chat", label: t("nav.chat"), icon: MessageCircle },
     { to: "/booth", label: t("nav.booth"), icon: MapPin },
+    { to: "/verify", label: t("nav.verify"), icon: ShieldCheck },
   ];
 
   const toggleLang = () => {
